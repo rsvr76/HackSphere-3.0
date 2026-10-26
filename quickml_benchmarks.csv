@@ -1,0 +1,19 @@
+Model,Feature Set,RMSE (kW),R2 Score,MAE (kW),Notes
+QuickML Stacking Regression,v2,11.6648,0.9636,9.4274,"Stacking: Level-0(Ridge,LGB,CB) + Level-1(Ridge)"
+QuickML Stacking Regression,v1,11.8342,0.9625,9.2929,"Stacking: Level-0(Ridge,LGB,CB,RF) + Level-1(Ridge)"
+QuickML Stacking + Peak Calibration,v2,12.124,0.9607,9.7879,Eliminates summer heat under-prediction
+QuickML Regression Ensemble,v2,12.3511,0.9592,10.0569,Voting: Ridge(50%)+LGB(25%)+CB(25%)
+GB Regression,v1,12.3567,0.9591,9.609,QuickML GB Regression
+Random-Forest Regression,v1,12.6695,0.957,9.7349,QuickML Random-Forest
+XGB Regression,v1,12.8396,0.9559,9.9988,QuickML XGBoost
+QuickML Regression Ensemble,v1,13.3,0.9527,10.5428,Voting: Ridge(45%)+LGB(25%)+CB(20%)+RF(10%)
+CatBoost Regression,v2,13.5764,0.9507,10.5455,v2 Features
+CatBoost Regression,v1,14.1459,0.9464,10.6705,QuickML CatBoost
+Ridge Regression,v2,14.4361,0.9442,11.5286,Added semi-diurnal harmonic + rush_cooling
+LGBM Regression,v1,14.5461,0.9434,11.4101,QuickML LGBM Regression
+LGBM Regression,v2,14.5601,0.9433,11.4786,v2 Features
+Square Root Transform + LGBM,v1,14.7193,0.942,11.506,QuickML Square Root Transform
+Robust Normalisation + Ridge,v1,18.341,0.91,14.5316,QuickML Robust Normalisation
+Ridge Regression,v1,18.3502,0.9099,14.5026,QuickML Ridge
+Mean-Std Normalisation + Ridge,v1,18.3821,0.9096,14.5963,QuickML Mean-Std Normalisation
+Elastic Net Regression,v1,21.1954,0.8798,17.0576,QuickML ElasticNet
