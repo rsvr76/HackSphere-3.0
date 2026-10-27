@@ -1,13 +1,20 @@
+import os
 import numpy as np
 import pandas as pd
 import requests
 
-QUICKML_ENDPOINT_URL = "https://api.catalyst.zoho.in/quickml/v1/project/104872000000013051/endpoints/predict"
+QUICKML_ENDPOINT_URL = os.environ.get(
+    "QUICKML_ENDPOINT_URL",
+    "https://api.catalyst.zoho.in/quickml/v1/project/104872000000013051/endpoints/predict",
+)
 
 QUICKML_HEADERS = {
-    "X-QUICKML-ENDPOINT-KEY": "ee804465b8120069321234e55829a92dba28c19793979b6bf91867647e7a1ca9fd9ac37df4b3cac358ba4b04d463cf30",
-    "CATALYST-ORG": "60093159850",
-    "Environment": "Development",
+    "X-QUICKML-ENDPOINT-KEY": os.environ.get(
+        "QUICKML_ENDPOINT_KEY",
+        "ee804465b8120069321234e55829a92dba28c19793979b6bf91867647e7a1ca9fd9ac37df4b3cac358ba4b04d463cf30",
+    ),
+    "CATALYST-ORG": os.environ.get("CATALYST_ORG_ID", "60093159850"),
+    "Environment": os.environ.get("CATALYST_ENVIRONMENT", "Development"),
     "Content-Type": "application/json",
 }
 
