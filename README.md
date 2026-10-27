@@ -56,41 +56,41 @@ The transition controller determines the active power source for each forecast h
 
 ```
 Hacksphere/
-├── build.zip                       # Catalyst Slate ready-to-deploy bundle
-├── LICENSE                         # MIT License
-├── README.md                       # Complete project and architecture documentation
+├── build.zip                          # Catalyst Slate ready-to-deploy bundle
+├── LICENSE                            # MIT License
+├── README.md                          # Complete project and architecture documentation
 ├── data/
-│   ├── train_telemetry.csv         # Ground-truth training dataset (4,000 hours)
-│   ├── sample_test_input.csv       # Chronological test input dataset (1,000 hours)
-│   ├── train_augmented.csv         # Feature-engineered dataset (cyclical, cooling degree)
-│   ├── train_augmented_v3.csv      # Optimized dataset with rush cooling interaction
-│   ├── predict.py                  # Official evaluation inference client (CLI + QuickML REST)
-│   ├── test_eval.py                # Pre-submission contract validation script
-│   ├── transition_controller.py    # Standalone transition controller engine & CLI batch evaluator
-│   └── test_transition_controller.py # 11-case automated boundary unit test suite
+│   ├── train_telemetry.csv            # Ground-truth training dataset (4,000 hours)
+│   ├── sample_test_input.csv          # Chronological test input dataset (1,000 hours)
+│   ├── train_augmented.csv            # Feature-engineered dataset (cyclical, cooling degree)
+│   ├── train_augmented_v3.csv         # Optimized dataset with rush cooling interaction
+│   ├── predict.py                     # Official evaluation inference client (CLI + QuickML REST)
+│   ├── test_eval.py                   # Pre-submission contract validation script
+│   ├── transition_controller.py       # Standalone transition controller engine & CLI batch evaluator
+│   └── test_transition_controller.py  # 11-case automated boundary unit test suite
 ├── docs/
 │   └── competition/
-│       ├── PROBLEM_STATEMENT.md    # Official hackathon problem specification
-│       └── PROBLEM_STATEMENT.pdf   # Competition briefing document
+│       ├── PROBLEM_STATEMENT.md       # Official hackathon problem specification
+│       └── PROBLEM_STATEMENT.pdf      # Competition briefing document
 └── frontend/
     ├── src/
     │   ├── components/
-    │   │   ├── ForecastChart.tsx   # 24-hour demand visualization with reference lines
-    │   │   ├── PowerFlowDiagram.tsx# Synoptic topology with Grid, Solar, Battery, Load
-    │   │   ├── TimeScrubber.tsx    # 24-hour scrubber with auto-simulation playback
-    │   │   ├── ScenarioPresets.tsx # 1-click judge test scenarios
-    │   │   ├── ManualInputModal.tsx# Telemetry input form with schema cleaner
-    │   │   ├── DispatchLogTable.tsx# Chronological transition and alert audit log
-    │   │   ├── TransitionPanel.tsx # Active state card, dispatch decision matrix, impact metrics
-    │   │   ├── OverloadBanner.tsx  # Critical alert banner for >= 200 kW events
-    │   │   └── WhatIfSimulator.tsx # Interactive single-hour parameter simulator
+    │   │   ├── ForecastChart.tsx      # 24-hour demand visualization with reference lines
+    │   │   ├── PowerFlowDiagram.tsx   # Synoptic topology with Grid, Solar, Battery, Load
+    │   │   ├── TimeScrubber.tsx       # 24-hour scrubber with auto-simulation playback
+    │   │   ├── ScenarioPresets.tsx    # 1-click judge test scenarios
+    │   │   ├── ManualInputModal.tsx   # Telemetry input form with schema cleaner
+    │   │   ├── DispatchLogTable.tsx   # Chronological transition and alert audit log
+    │   │   ├── TransitionPanel.tsx    # Active state card, dispatch decision matrix, impact metrics
+    │   │   ├── OverloadBanner.tsx     # Critical alert banner for >= 200 kW events
+    │   │   └── WhatIfSimulator.tsx    # Interactive single-hour parameter simulator
     │   ├── utils/
-    │   │   └── microgridLogic.ts   # Client-side microgrid calculation engine
-    │   ├── App.tsx                 # Dashboard container and state orchestration
-    │   └── main.tsx                # React root mount
+    │   │   └── microgridLogic.ts      # Client-side microgrid calculation engine
+    │   ├── App.tsx                    # Dashboard container and state orchestration
+    │   └── main.tsx                   # React root mount
     ├── dist/
-    │   └── index.html              # Inlined single-file production build
-    └── package.json                # Frontend dependencies and build scripts
+    │   └── index.html                 # Inlined single-file production build
+    └── package.json                   # Frontend dependencies and build scripts
 ```
 
 ## Getting Started & Local Setup
