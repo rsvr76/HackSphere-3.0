@@ -4,8 +4,6 @@ An end-to-end intelligent microgrid energy management and demand forecasting pla
 
 Live Catalyst Application: https://hacksphere-microgrid-rllrfyow.onslate.in
 
-GitHub Repository: https://github.com/rsvr76/HackSphere.git
-
 ## Key Highlights & Performance Metrics
 
 * Model Accuracy (35% Rubric): QuickML Stacking Regressor (Gradient Boosting + Random Forest + Ridge Meta-Learner) achieving RMSE = 8.8562 kW, R² = 0.9695, MAE = 7.0972 kW, and MAPE = 5.0693% in Zoho Catalyst. Version 3 cross-validated benchmark reached RMSE = 8.7194 kW (R² = 0.9702).
