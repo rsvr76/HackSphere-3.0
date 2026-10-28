@@ -1,4 +1,5 @@
-import { BatteryFull, Leaf, PlugZap, Radar, ShieldAlert, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { BatteryFull, ChevronDown, ChevronUp, Leaf, PlugZap, Radar, ShieldAlert, Sparkles } from "lucide-react";
 import type { ForecastPoint, ImpactSummary } from "../utils/microgridLogic";
 import StatusPill from "./StatusPill";
 
@@ -9,124 +10,134 @@ export default function TransitionPanel({
   current: ForecastPoint;
   impact?: ImpactSummary;
 }) {
+  const [showRuleAudit, setShowRuleAudit] = useState(false);
   const isRenewable = current.mode === "RENEWABLE_STORAGE";
+  const isOverload = current.isOverload;
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-colors md:p-5 dark:border-slate-800 dark:bg-slate-900/50 dark:shadow-none">
-      <div className="mb-4 flex items-center justify-between">
+    <div className="rounded-xl border border-slate-200/90 bg-white p-4 shadow-sm transition-all dark:border-slate-800 dark:bg-slate-900/60 dark:shadow-none">
+      {/* Header matching Mockup */}
+      <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Radar className="h-4 w-4 text-slate-500 dark:text-slate-400" />
-          <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">Smart Transition Controller</h2>
+          <Radar className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+          <h3 className="text-sm font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Transition controller
+          </h3>
         </div>
-        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+        <span className="font-mono text-xs font-semibold text-slate-500 dark:text-slate-400">
           Hour {current.hourLabel}
         </span>
       </div>
 
-      {/* Hero mode badge */}
-      <div
-        className={`relative overflow-hidden rounded-xl border p-4 transition-all ${
-          isRenewable
-            ? "border-emerald-300 bg-emerald-50/70 shadow-xs dark:border-emerald-500/30 dark:bg-emerald-500/5"
-            : "border-sky-300 bg-sky-50/70 shadow-xs dark:border-sky-500/30 dark:bg-sky-500/5"
-        }`}
-      >
-        <div className="flex items-center gap-3">
-          <div
-            className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${
-              isRenewable
-                ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400"
-                : "bg-sky-100 text-sky-700 dark:bg-sky-500/15 dark:text-sky-400"
-            }`}
-          >
+      {/* Primary Status Card matching Mockup */}
+      <div className="space-y-3">
+        {/* Mode & Reason */}
+        <div>
+          <div className="flex items-center gap-2">
             <span
-              className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-40 ${
-                isRenewable ? "bg-emerald-400" : "bg-sky-400"
+              className={`text-lg font-black tracking-tight sm:text-xl ${
+                isRenewable
+                  ? "text-emerald-600 dark:text-emerald-400"
+                  : "text-sky-600 dark:text-sky-400"
               }`}
-            />
-            {isRenewable ? (
-              <Leaf className="relative h-5 w-5" />
-            ) : (
-              <PlugZap className="relative h-5 w-5" />
-            )}
+            >
+              {isRenewable ? "Renewable Storage" : "Main Grid Mode"}
+            </span>
+            <span className="relative flex h-2 w-2">
+              <span
+                className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${
+                  isRenewable ? "bg-emerald-400" : "bg-sky-400"
+                }`}
+              />
+              <span
+                className={`relative inline-flex h-2 w-2 rounded-full ${
+                  isRenewable ? "bg-emerald-500" : "bg-sky-500"
+                }`}
+              />
+            </span>
           </div>
-          <div>
-            <p className={`text-sm font-bold ${isRenewable ? "text-emerald-950 dark:text-emerald-300" : "text-sky-950 dark:text-sky-300"}`}>
-              {isRenewable ? "Renewable Storage Mode" : "Main Grid Mode"}
-            </p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              {isRenewable
-                ? "Source: Renewable Battery Storage (Peak load shaving active)"
-                : "Source: Main Utility Grid (Base load operating within safe limits)"}
-            </p>
-          </div>
-        </div>
-        <p className="mt-3 rounded-lg border border-slate-200/80 bg-white/80 px-3 py-2 text-xs leading-relaxed text-slate-700 shadow-xs dark:border-transparent dark:bg-black/20 dark:text-slate-300">
-          <span className="font-semibold text-slate-900 dark:text-slate-200">Triggered by:</span> {current.reason}
-        </p>
-      </div>
-
-      {/* Decision matrix */}
-      <div className="mt-4 space-y-2">
-        <p className="text-[11px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-          Live Decision Matrix (Hour {current.hourLabel})
-        </p>
-        <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50/70 px-3 py-2 text-xs shadow-xs dark:border-slate-800 dark:bg-slate-950/40 dark:shadow-none">
-          <span className="font-medium text-slate-700 dark:text-slate-400">Demand &gt; 160 kW</span>
-          <StatusPill color={current.isHighDemand ? "rose" : "sky"}>
-            {current.isHighDemand ? "TRUE" : "FALSE"}
-          </StatusPill>
-        </div>
-        <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50/70 px-3 py-2 text-xs shadow-xs dark:border-slate-800 dark:bg-slate-950/40 dark:shadow-none">
-          <span className="font-medium text-slate-700 dark:text-slate-400">Hour in 18:00–22:00</span>
-          <StatusPill color={current.isPeakHour ? "rose" : "sky"}>
-            {current.isPeakHour ? "TRUE" : "FALSE"}
-          </StatusPill>
-        </div>
-        <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50/70 px-3 py-2 text-xs shadow-xs dark:border-slate-800 dark:bg-slate-950/40 dark:shadow-none">
-          <span className="font-medium text-slate-700 dark:text-slate-400">Demand ≥ 200 kW (Overload)</span>
-          <StatusPill color={current.isOverload ? "rose" : "sky"}>
-            {current.isOverload ? "TRUE" : "FALSE"}
-          </StatusPill>
-        </div>
-        <div className="flex items-center justify-between rounded-lg border border-emerald-300/80 bg-emerald-50/80 px-3 py-2 text-xs shadow-xs dark:border-emerald-500/20 dark:bg-emerald-500/5 dark:shadow-none">
-          <span className="flex items-center gap-1.5 font-semibold text-emerald-950 dark:text-slate-300">
-            <BatteryFull className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" /> Dispatch Signal
-          </span>
-          <StatusPill color={current.statusColor} pulse>
-            {isRenewable ? "RENEWABLE" : "MAIN GRID"}
-          </StatusPill>
-        </div>
-      </div>
-
-      {/* 24h Microgrid Impact Strip */}
-      {impact && (
-        <div className="mt-4 border-t border-slate-200 pt-3 dark:border-slate-800">
-          <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-            24h Microgrid Peak-Shaving Impact
+          <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
+            <span className="font-semibold text-slate-700 dark:text-slate-400">Reason:</span>{" "}
+            {current.reason.replace("Demand Trigger: ", "").replace("Time Trigger: ", "").replace("Dual Trigger: ", "")}
           </p>
-          <div className="grid grid-cols-3 gap-2 text-center text-xs">
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-2 dark:border-slate-800 dark:bg-slate-950/50">
-              <p className="text-[10px] text-slate-500">Peak Shaved</p>
-              <p className="font-bold tabular-nums text-slate-900 dark:text-slate-100">
-                {impact.peakShavedKw} <span className="text-[10px] font-normal text-slate-400">kW</span>
-              </p>
-            </div>
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-2 dark:border-slate-800 dark:bg-slate-950/50">
-              <p className="text-[10px] text-slate-500">Storage Clean</p>
-              <p className="font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
-                {impact.renewableDispatchedKwh} <span className="text-[10px] font-normal text-slate-400">kWh</span>
-              </p>
-            </div>
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-2 dark:border-slate-800 dark:bg-slate-950/50">
-              <p className="text-[10px] text-slate-500">CO₂ Avoided</p>
-              <p className="font-bold tabular-nums text-sky-600 dark:text-sky-400">
-                {impact.carbonOffsetKg} <span className="text-[10px] font-normal text-slate-400">kg</span>
-              </p>
-            </div>
-          </div>
         </div>
-      )}
+
+        {/* Overload line matching Mockup */}
+        <div className="flex items-center justify-between rounded-lg border border-slate-100 bg-slate-50/70 px-3 py-2 text-xs dark:border-slate-800/80 dark:bg-slate-950/40">
+          <span className="font-medium text-slate-600 dark:text-slate-400">Overload state</span>
+          {isOverload ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-500/15 px-2.5 py-0.5 text-xs font-bold text-rose-600 dark:text-rose-400 animate-pulse">
+              <ShieldAlert className="h-3.5 w-3.5" /> Active at peak ({current.demandKw.toFixed(1)} kW)
+            </span>
+          ) : (
+            <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+              Normal operating limits
+            </span>
+          )}
+        </div>
+
+        {/* Collapsible Rule Decision Audit for Judges */}
+        <div className="border-t border-slate-100 pt-2 dark:border-slate-800/80">
+          <button
+            onClick={() => setShowRuleAudit((prev) => !prev)}
+            className="flex w-full items-center justify-between text-[11px] font-semibold text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+          >
+            <span>Inspect Rule Evaluation Matrix</span>
+            {showRuleAudit ? (
+              <ChevronUp className="h-3.5 w-3.5" />
+            ) : (
+              <ChevronDown className="h-3.5 w-3.5" />
+            )}
+          </button>
+
+          {showRuleAudit && (
+            <div className="mt-2 space-y-1.5 rounded-lg border border-slate-200/80 bg-slate-50/90 p-2.5 text-[11px] dark:border-slate-800 dark:bg-slate-950/60">
+              <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
+                <span>Rule 1a: Demand &gt; 160 kW</span>
+                <span
+                  className={`font-mono font-bold ${
+                    current.isHighDemand ? "text-rose-600 dark:text-rose-400" : "text-slate-400"
+                  }`}
+                >
+                  {current.isHighDemand ? "TRUE (Triggered)" : "FALSE"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
+                <span>Rule 1b: Hour in 18:00–22:00</span>
+                <span
+                  className={`font-mono font-bold ${
+                    current.isPeakHour ? "text-emerald-600 dark:text-emerald-400" : "text-slate-400"
+                  }`}
+                >
+                  {current.isPeakHour ? "TRUE (Triggered)" : "FALSE"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
+                <span>Rule 2: Base Grid (Demand &le; 160 &amp; off-peak)</span>
+                <span
+                  className={`font-mono font-bold ${
+                    !current.isHighDemand && !current.isPeakHour
+                      ? "text-sky-600 dark:text-sky-400"
+                      : "text-slate-400"
+                  }`}
+                >
+                  {!current.isHighDemand && !current.isPeakHour ? "TRUE (Main Grid)" : "FALSE"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between border-t border-slate-200/60 pt-1 text-slate-600 dark:border-slate-800 dark:text-slate-400">
+                <span>Rule 3: Critical Overload &ge; 200 kW</span>
+                <span
+                  className={`font-mono font-bold ${
+                    current.isOverload ? "text-rose-600 dark:text-rose-400" : "text-slate-400"
+                  }`}
+                >
+                  {current.isOverload ? "ALERT ACTIVE" : "SAFE"}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

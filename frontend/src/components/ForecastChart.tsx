@@ -116,13 +116,15 @@ export default function ForecastChart({
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">24-Hour Demand Forecast</h2>
+            <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">
+              24-hour demand forecast
+            </h2>
             <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-              Click chart to inspect hour
+              Click to inspect
             </span>
           </div>
-          <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
-            Hourly load prediction with switching &amp; critical thresholds
+          <p className="mt-0.5 text-xs font-medium text-slate-500 dark:text-slate-400">
+            160 kW switching · 200 kW critical limits
           </p>
         </div>
         <div className="flex items-center gap-2">
