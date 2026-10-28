@@ -1,13 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import Navbar from "./components/Navbar";
-import CommandDeck from "./components/CommandDeck";
 import WorkspaceTabs, { type WorkspaceTabId } from "./components/WorkspaceTabs";
 import OverloadBanner from "./components/OverloadBanner";
 import KpiMetricsGrid from "./components/KpiMetricsGrid";
 import ForecastChart from "./components/ForecastChart";
 import TransitionPanel from "./components/TransitionPanel";
 import MicrogridPowerFlow from "./components/MicrogridPowerFlow";
-import DispatchTimeline from "./components/DispatchTimeline";
 import TelemetryTable from "./components/TelemetryTable";
 import WhatIfSimulator from "./components/WhatIfSimulator";
 import CsvUploader from "./components/CsvUploader";
@@ -28,7 +26,7 @@ import {
   SCENARIO_PRESETS,
   type ScenarioId,
 } from "./utils/sampleData";
-import { CheckCircle2, Database, Info, Sparkles, AlertCircle } from "lucide-react";
+import { CheckCircle2, Database, Info, AlertCircle } from "lucide-react";
 
 interface Toast {
   id: number;
@@ -143,14 +141,21 @@ export default function App() {
 
   const impact = useMemo(() => calculateImpactSummary(forecast), [forecast]);
 
-  // Automated 24-hour simulation timer
+  // Automated 24-hour simulation timer — strictly constrained to Overview tab
   useEffect(() => {
-    if (!isPlaying || forecast.length === 0) return;
+    if (!isPlaying || activeTab !== "overview" || forecast.length === 0) return;
     const interval = setInterval(() => {
       setActiveHourIndex((prev) => (prev + 1) % forecast.length);
     }, 1200);
     return () => clearInterval(interval);
-  }, [isPlaying, forecast.length]);
+  }, [isPlaying, activeTab, forecast.length]);
+
+  // Pause simulation animation whenever user switches away from Overview tab
+  useEffect(() => {
+    if (activeTab !== "overview" && isPlaying) {
+      setIsPlaying(false);
+    }
+  }, [activeTab, isPlaying]);
 
   const apiConnected = !apiSettings.mockMode && apiSettings.endpoint.length > 0;
 
@@ -223,47 +228,11 @@ export default function App() {
       />
 
       <main className="mx-auto max-w-7xl space-y-5 p-4 md:p-6 lg:p-8">
-        {/* Model & Endpoint Sub-header Banner */}
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs text-slate-700 shadow-xs transition-colors dark:border-slate-800/80 dark:bg-slate-900/40 dark:text-slate-300 dark:shadow-none">
-          <div className="flex items-center gap-2">
-            {predictionSource === "quickml" ? (
-              <>
-                <Database className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                <span>
-                  <strong className="text-emerald-700 dark:text-emerald-400">Live Catalyst QuickML Endpoint Active</strong> ·
-                  Project: <code className="font-mono text-slate-600 dark:text-slate-400">104872000000013051</code> · Org:{" "}
-                  <code className="font-mono text-slate-600 dark:text-slate-400">60093159850</code>
-                </span>
-              </>
-            ) : (
-              <>
-                <Sparkles className="h-4 w-4 text-sky-600 dark:text-sky-400" />
-                <span>
-                  <strong className="text-sky-700 dark:text-sky-400">Version 2 Stacking Ensemble Active</strong> ·
-                  Benchmark Verified: <code className="font-mono font-medium text-slate-800 dark:text-slate-300">RMSE 8.85 kW (R² 0.9695)</code>
-                </span>
-              </>
-            )}
-          </div>
-          <button
-            onClick={() => setSettingsOpen(true)}
-            className="text-xs font-semibold text-sky-600 underline underline-offset-2 hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300"
-          >
-            Configure Endpoint &amp; Keys
-          </button>
-        </div>
-
-        {/* Phase 2: Guided Workflow Command Deck (Steps 1, 2, 3) */}
-        <CommandDeck
-          telemetry={telemetry}
-          activeScenario={activeScenario}
-          onSelectScenario={handleSelectScenario}
-          onOpenUpload={() => setActiveTab("telemetry_model")}
-          onOpenManual={() => setManualModalOpen(true)}
-          onRunSimulation={runSimulation}
-          isSimulating={isSimulating}
-          hasRunSimulation={hasRunSimulation}
-          predictionSource={predictionSource}
+        {/* Workspace Tabs Navigation */}
+        <WorkspaceTabs
+          activeTab={activeTab}
+          onSelectTab={setActiveTab}
+          overloadCount={overloadCount}
         />
 
         {/* Error notification if simulation fails */}
@@ -274,55 +243,63 @@ export default function App() {
           </div>
         )}
 
-        {/* Phase 3: Workspace Tabs Navigation */}
-        <WorkspaceTabs
-          activeTab={activeTab}
-          onSelectTab={setActiveTab}
-          overloadCount={overloadCount}
-        />
-
         {/* ========================================================= */}
-        {/* TAB 1: OVERVIEW — The Main Coordinated Workspace (Phase 1) */}
+        {/* TAB 1: OVERVIEW — TOP RESULTS FIRST FOR JUDGES            */}
         {/* ========================================================= */}
         {activeTab === "overview" && (
-          <div className="space-y-4">
+          <div className="space-y-5">
             {/* Overload Incident Alert (if any overload exists) */}
             <OverloadBanner forecast={forecast} />
 
-            {/* Component 1: Summary KPI Row */}
+            {/* COMPACT CONTROL STRIP — 1-Click Scenario Presets */}
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-xs dark:border-slate-800 dark:bg-slate-900/60 dark:shadow-none">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  Scenario:
+                </span>
+                {SCENARIO_PRESETS.map((preset) => (
+                  <button
+                    key={preset.id}
+                    onClick={() => handleSelectScenario(preset.id)}
+                    className={`rounded-lg border px-3 py-1.5 text-xs font-bold transition-all ${
+                      activeScenario === preset.id
+                        ? "border-emerald-400 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
+                        : "border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:border-slate-700"
+                    }`}
+                  >
+                    {preset.title}
+                  </button>
+                ))}
+              </div>
+              <span className="hidden text-[11px] text-slate-400 sm:inline">
+                Click preset to evaluate real-time 24-hour microgrid response
+              </span>
+            </div>
+
+            {/* TOP RESULTS 1: Summary KPI Scorecard Row */}
             <KpiMetricsGrid forecast={forecast} activeHour={activePoint} />
 
-            {/* Components 2 & 3: Two-Column Main Workspace */}
-            <section className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-              {/* Left Column (7 cols): 24-Hour Demand Forecast Chart */}
-              <div className="lg:col-span-7">
-                <ForecastChart
-                  forecast={forecast}
-                  theme={theme}
-                  activeHourIndex={activeHourIndex}
-                  onSelectHour={setActiveHourIndex}
-                />
-              </div>
+            {/* TOP RESULTS 2: Full-Width 24-Hour Multi-Colored Forecast Chart */}
+            <div className="w-full">
+              <ForecastChart
+                forecast={forecast}
+                theme={theme}
+                activeHourIndex={activeHourIndex}
+                onSelectHour={setActiveHourIndex}
+                isPlaying={isPlaying}
+                onTogglePlay={() => setIsPlaying((p) => !p)}
+                onReset={() => {
+                  setIsPlaying(false);
+                  setActiveHourIndex(0);
+                }}
+              />
+            </div>
 
-              {/* Right Column (5 cols): Transition Controller & Microgrid Power Flow */}
-              <div className="space-y-4 lg:col-span-5">
-                {activePoint && <TransitionPanel current={activePoint} impact={impact} />}
-                {activePoint && <MicrogridPowerFlow current={activePoint} />}
-              </div>
+            {/* TOP RESULTS 3: Side-by-Side Transition Controller & Microgrid Power Flow */}
+            <section className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+              {activePoint && <TransitionPanel current={activePoint} impact={impact} />}
+              {activePoint && <MicrogridPowerFlow current={activePoint} />}
             </section>
-
-            {/* Component 4: 24-Hour Dispatch Timeline directly below main workspace */}
-            <DispatchTimeline
-              forecast={forecast}
-              activeHourIndex={activeHourIndex}
-              onSelectHour={setActiveHourIndex}
-              isPlaying={isPlaying}
-              onTogglePlay={() => setIsPlaying((p) => !p)}
-              onReset={() => {
-                setIsPlaying(false);
-                setActiveHourIndex(0);
-              }}
-            />
           </div>
         )}
 
@@ -383,10 +360,6 @@ export default function App() {
                     <strong className="text-slate-800 dark:text-slate-200">Organization:</strong>{" "}
                     <code className="font-mono">{apiSettings.catalystOrg}</code> (Environment:{" "}
                     <code className="font-mono">{apiSettings.environment}</code>)
-                  </p>
-                  <p className="text-slate-600 dark:text-slate-400">
-                    <strong className="text-slate-800 dark:text-slate-200">Active Pipeline:</strong>{" "}
-                    Version 2 Stacking Regression (RMSE = 8.8562 kW, R² = 0.9695, MAPE = 5.07%)
                   </p>
                 </div>
                 <div className="mt-4 flex gap-2">

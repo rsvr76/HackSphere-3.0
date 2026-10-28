@@ -155,24 +155,24 @@ export default function TelemetryTable({
                         : "hover:bg-slate-50 dark:hover:bg-slate-800/30"
                     }`}
                   >
-                    <td className="whitespace-nowrap px-3 py-2 font-semibold text-slate-900 dark:text-slate-200">
-                      <span className="flex items-center gap-1.5">
+                    <td className="whitespace-nowrap px-3 py-2 font-bold text-slate-900 dark:text-slate-200">
+                      <span className="flex items-center gap-1.5 font-mono text-xs sm:text-sm font-black">
                         {isSelected && <span className="h-1.5 w-1.5 rounded-full bg-sky-500" />}
                         {row.hourLabel}
                       </span>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-2 text-slate-600 font-medium tabular-nums dark:text-slate-400">
+                    <td className="whitespace-nowrap px-3 py-2 text-slate-700 font-bold tabular-nums font-mono text-xs sm:text-sm dark:text-slate-300">
                       {row.ambient_temp_c.toFixed(1)}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-2 text-slate-600 font-medium tabular-nums dark:text-slate-400">
+                    <td className="whitespace-nowrap px-3 py-2 text-slate-700 font-bold tabular-nums font-mono text-xs sm:text-sm dark:text-slate-300">
                       {row.humidity_pct.toFixed(0)}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-2 text-slate-600 font-medium tabular-nums dark:text-slate-400">
+                    <td className="whitespace-nowrap px-3 py-2 text-slate-700 font-bold tabular-nums font-mono text-xs sm:text-sm dark:text-slate-300">
                       {row.solar_irradiance_wm2.toFixed(0)}
                     </td>
                     <td
-                      className={`whitespace-nowrap px-3 py-2 font-bold tabular-nums ${
-                        row.isOverload ? "text-rose-600 dark:text-rose-400" : "text-slate-900 dark:text-slate-200"
+                      className={`whitespace-nowrap px-3 py-2 font-mono text-sm sm:text-base font-black tabular-nums ${
+                        row.isOverload ? "text-rose-600 dark:text-rose-400" : "text-slate-900 dark:text-slate-100"
                       }`}
                     >
                       {row.demandKw.toFixed(1)}

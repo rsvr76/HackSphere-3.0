@@ -30,28 +30,22 @@ export default function KpiMetricsGrid({
           <TrendingUp
             className={`h-4 w-4 ${
               isOverloadPeak
-                ? "text-rose-600 dark:text-rose-400"
+                ? "text-amber-500 dark:text-amber-400"
                 : "text-slate-400 dark:text-slate-500"
             }`}
           />
         </div>
         <div className="mt-2 flex items-baseline gap-1.5">
-          <span
-            className={`text-2xl font-black tracking-tight tabular-nums sm:text-3xl ${
-              isOverloadPeak
-                ? "text-rose-600 dark:text-rose-400"
-                : "text-slate-900 dark:text-slate-100"
-            }`}
-          >
+          <span className="text-2xl font-black tracking-tight tabular-nums sm:text-3xl text-slate-900 dark:text-slate-100">
             {peak.demandKw.toFixed(1)}
           </span>
           <span className="text-xs font-semibold text-slate-500">kW</span>
         </div>
         <div className="mt-1 flex items-center gap-1.5 text-[11px]">
-          <span className="font-mono text-slate-500 dark:text-slate-400">@ {peak.hourLabel}</span>
+          <span className="font-mono text-xs font-bold text-slate-700 dark:text-slate-300">@ {peak.hourLabel}</span>
           {isOverloadPeak ? (
-            <span className="rounded bg-rose-500/10 px-1.5 py-0.5 text-[10px] font-bold text-rose-600 dark:text-rose-400">
-              Critical Surge
+            <span className="rounded bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-bold text-amber-600 dark:text-amber-400">
+              Peak Surge
             </span>
           ) : (
             <span className="rounded bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
@@ -75,7 +69,7 @@ export default function KpiMetricsGrid({
           </StatusPill>
         </div>
         <p className="mt-1.5 line-clamp-1 text-[11px] text-slate-500 dark:text-slate-400">
-          Hour {current.hourLabel} · {current.demandKw.toFixed(1)} kW load
+          Hour <span className="font-mono font-bold text-slate-800 dark:text-slate-200">{current.hourLabel}</span> · <span className="font-mono text-xs font-black text-slate-900 dark:text-slate-100">{current.demandKw.toFixed(1)} kW</span> load
         </p>
       </div>
 
@@ -94,13 +88,7 @@ export default function KpiMetricsGrid({
           />
         </div>
         <div className="mt-2 flex items-baseline gap-1.5">
-          <span
-            className={`text-2xl font-black tracking-tight tabular-nums sm:text-3xl ${
-              overloadCount > 0
-                ? "text-rose-600 dark:text-rose-400"
-                : "text-emerald-600 dark:text-emerald-400"
-            }`}
-          >
+          <span className="text-2xl font-black tracking-tight tabular-nums sm:text-3xl text-slate-900 dark:text-slate-100">
             {overloadCount}
           </span>
           <span className="text-xs font-semibold text-slate-500">hours ≥ 200 kW</span>

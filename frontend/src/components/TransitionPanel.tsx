@@ -25,7 +25,7 @@ export default function TransitionPanel({
           </h3>
         </div>
         <span className="font-mono text-xs font-semibold text-slate-500 dark:text-slate-400">
-          Hour {current.hourLabel}
+          Hour <span className="text-sm font-black text-slate-900 dark:text-slate-100">{current.hourLabel}</span>
         </span>
       </div>
 
@@ -66,8 +66,8 @@ export default function TransitionPanel({
         <div className="flex items-center justify-between rounded-lg border border-slate-100 bg-slate-50/70 px-3 py-2 text-xs dark:border-slate-800/80 dark:bg-slate-950/40">
           <span className="font-medium text-slate-600 dark:text-slate-400">Overload state</span>
           {isOverload ? (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-500/15 px-2.5 py-0.5 text-xs font-bold text-rose-600 dark:text-rose-400 animate-pulse">
-              <ShieldAlert className="h-3.5 w-3.5" /> Active at peak ({current.demandKw.toFixed(1)} kW)
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-xs font-bold text-amber-600 dark:text-amber-400">
+              <ShieldAlert className="h-3.5 w-3.5" /> Overload Active (<span className="font-mono text-sm font-black">{current.demandKw.toFixed(1)} kW</span>)
             </span>
           ) : (
             <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">

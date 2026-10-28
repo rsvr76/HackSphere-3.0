@@ -6,7 +6,7 @@ Live Catalyst Application: [https://hacksphere-xnlbnoyd.onslate.in](https://hack
 
 ## Key Highlights & Performance Metrics
 
-* Model Accuracy (35% Rubric): QuickML Stacking Regressor (Gradient Boosting + Random Forest + Ridge Meta-Learner) achieving RMSE = 8.8562 kW, R² = 0.9695, MAE = 7.0972 kW, and MAPE = 5.0693% in Zoho Catalyst. Version 3 cross-validated benchmark reached RMSE = 8.7194 kW (R² = 0.9702).
+* Model Accuracy (35% Rubric): QuickML Stacking Regressor (Gradient Boosting + Random Forest + Ridge Meta-Learner) achieving RMSE = 8.8562 kW, R² = 0.9695, MAE = 7.0972 kW, and MAPE = 5.0693% in Zoho Catalyst.
 * Transition Controller Logic (20% Rubric): 100% test pass rate across 11 boundary scenarios in automated test suite (`data/test_transition_controller.py`), strictly enforcing the 160 kW switching boundary, 18:00–22:00 peak window, and 200 kW overload condition.
 * Deployment & Live Functionality (35% Rubric): Publicly accessible, responsive single-file production bundle hosted on Zoho Catalyst Slate with complete end-to-end telemetry ingestion, inference, dispatch calculation, and export pipelines.
 * UI & User Experience (10% Rubric): Command-center dashboard featuring dynamic 24-hour demand visualization, animated microgrid power flow synoptic topology, 24-hour time-travel scrubber with auto-simulation playback, 1-click judge presets, manual telemetry bounds cleaner, dispatch audit log with CSV export, and full dark/light theme support.
@@ -100,23 +100,20 @@ Hacksphere/
 
 ### 1. Python Inference & Controller Testing
 
-Navigate to the `data/` directory:
-
-```bash
-cd data
-```
+The evaluation scripts can be executed directly from either the **project root** or within the **data/** directory.
 
 Install the required Python packages:
 
-```bash
+`ash
 pip install requests pandas numpy scikit-learn
-```
+`
 
 Run the mandatory pre-submission self-test:
 
-```bash
+`ash
 python test_eval.py
-```
+`
+
 
 Expected output:
 ```
