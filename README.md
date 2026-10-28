@@ -2,7 +2,7 @@
 
 An end-to-end intelligent microgrid energy management and demand forecasting platform deployed on Zoho Catalyst. Built for the HackSphere 3.0 hackathon challenge, the system forecasts 24-hour hourly energy demand using a high-precision Zoho Catalyst QuickML Stacking Regression model and dynamically dispatches power transitions between the Main Grid and Renewable Battery Storage, while actively monitoring critical grid overload thresholds.
 
-Live Catalyst Application: https://hacksphere-microgrid-rllrfyow.onslate.in
+Live Catalyst Application: [https://hacksphere-xnlbnoyd.onslate.in](https://hacksphere-xnlbnoyd.onslate.in)
 
 ## Key Highlights & Performance Metrics
 
